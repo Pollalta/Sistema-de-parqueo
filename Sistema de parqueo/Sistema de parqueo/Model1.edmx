@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="estacionamientoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="id_customer" />
+          </Key>
+          <Property Name="id_customer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customer_name" Type="varchar" MaxLength="50" />
+          <Property Name="customer_lastname" Type="varchar" MaxLength="50" />
+          <Property Name="customer_DUI" Type="varchar" MaxLength="50" />
+          <Property Name="customer_password" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="parking_lot">
+          <Key>
+            <PropertyRef Name="id_parking_lot" />
+          </Key>
+          <Property Name="id_parking_lot" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="is_parking_lot_full" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="numbers_of_slots" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="parking_slot">
+          <Key>
+            <PropertyRef Name="id_parking_slot" />
+          </Key>
+          <Property Name="id_parking_slot" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_parking_lot" Type="int" Nullable="false" />
+          <Property Name="slot_number" Type="int" Nullable="false" />
+          <Property Name="is_parking_slot_free" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="parking_slot_reservation">
+          <Key>
+            <PropertyRef Name="id_reservation" />
+          </Key>
+          <Property Name="id_reservation" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customer_DUI" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_parking_slot" Type="int" Nullable="false" />
+          <Property Name="hora_reserva" Type="datetime" Nullable="false" />
+          <Property Name="duration_in_minutes" Type="int" Nullable="false" />
+          <Property Name="hora_finalizada" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_parking_slot_parking_lot">
+          <End Role="parking_lot" Type="Self.parking_lot" Multiplicity="1" />
+          <End Role="parking_slot" Type="Self.parking_slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="parking_lot">
+              <PropertyRef Name="id_parking_lot" />
+            </Principal>
+            <Dependent Role="parking_slot">
+              <PropertyRef Name="id_parking_lot" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errores durante la generación:
+advertencia 6035: La relación 'FK_parking_slot_reservation_customer' tiene columnas que no forman parte de la clave de la tabla en el lado principal de la relación. Se excluyó la relación.
+        <Association Name="FK_parking_slot_reservation_customer" />-->
+        <Association Name="FK_parking_slot_reservation_parking_slot">
+          <End Role="parking_slot" Type="Self.parking_slot" Multiplicity="1" />
+          <End Role="parking_slot_reservation" Type="Self.parking_slot_reservation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="parking_slot">
+              <PropertyRef Name="id_parking_slot" />
+            </Principal>
+            <Dependent Role="parking_slot_reservation">
+              <PropertyRef Name="id_parking_slot" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="estacionamientoModelStoreContainer">
+          <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="parking_lot" EntityType="Self.parking_lot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="parking_slot" EntityType="Self.parking_slot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="parking_slot_reservation" EntityType="Self.parking_slot_reservation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_parking_slot_parking_lot" Association="Self.FK_parking_slot_parking_lot">
+            <End Role="parking_lot" EntitySet="parking_lot" />
+            <End Role="parking_slot" EntitySet="parking_slot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_parking_slot_reservation_parking_slot" Association="Self.FK_parking_slot_reservation_parking_slot">
+            <End Role="parking_slot" EntitySet="parking_slot" />
+            <End Role="parking_slot_reservation" EntitySet="parking_slot_reservation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="estacionamientoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="id_customer" />
+          </Key>
+          <Property Name="id_customer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customer_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="customer_lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="customer_DUI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="customer_password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="parking_lot">
+          <Key>
+            <PropertyRef Name="id_parking_lot" />
+          </Key>
+          <Property Name="id_parking_lot" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="is_parking_lot_full" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="numbers_of_slots" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="parking_slot" Relationship="Self.FK_parking_slot_parking_lot" FromRole="parking_lot" ToRole="parking_slot" />
+        </EntityType>
+        <EntityType Name="parking_slot">
+          <Key>
+            <PropertyRef Name="id_parking_slot" />
+          </Key>
+          <Property Name="id_parking_slot" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_parking_lot" Type="Int32" Nullable="false" />
+          <Property Name="slot_number" Type="Int32" Nullable="false" />
+          <Property Name="is_parking_slot_free" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="parking_lot" Relationship="Self.FK_parking_slot_parking_lot" FromRole="parking_slot" ToRole="parking_lot" />
+          <NavigationProperty Name="parking_slot_reservation" Relationship="Self.FK_parking_slot_reservation_parking_slot" FromRole="parking_slot" ToRole="parking_slot_reservation" />
+        </EntityType>
+        <EntityType Name="parking_slot_reservation">
+          <Key>
+            <PropertyRef Name="id_reservation" />
+          </Key>
+          <Property Name="id_reservation" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customer_DUI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_parking_slot" Type="Int32" Nullable="false" />
+          <Property Name="hora_reserva" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="duration_in_minutes" Type="Int32" Nullable="false" />
+          <Property Name="hora_finalizada" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="parking_slot" Relationship="Self.FK_parking_slot_reservation_parking_slot" FromRole="parking_slot_reservation" ToRole="parking_slot" />
+        </EntityType>
+        <Association Name="FK_parking_slot_parking_lot">
+          <End Role="parking_lot" Type="Self.parking_lot" Multiplicity="1" />
+          <End Role="parking_slot" Type="Self.parking_slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="parking_lot">
+              <PropertyRef Name="id_parking_lot" />
+            </Principal>
+            <Dependent Role="parking_slot">
+              <PropertyRef Name="id_parking_lot" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_parking_slot_reservation_parking_slot">
+          <End Role="parking_slot" Type="Self.parking_slot" Multiplicity="1" />
+          <End Role="parking_slot_reservation" Type="Self.parking_slot_reservation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="parking_slot">
+              <PropertyRef Name="id_parking_slot" />
+            </Principal>
+            <Dependent Role="parking_slot_reservation">
+              <PropertyRef Name="id_parking_slot" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="estacionamientoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="customer" EntityType="Self.customer" />
+          <EntitySet Name="parking_lot" EntityType="Self.parking_lot" />
+          <EntitySet Name="parking_slot" EntityType="Self.parking_slot" />
+          <EntitySet Name="parking_slot_reservation" EntityType="Self.parking_slot_reservation" />
+          <AssociationSet Name="FK_parking_slot_parking_lot" Association="Self.FK_parking_slot_parking_lot">
+            <End Role="parking_lot" EntitySet="parking_lot" />
+            <End Role="parking_slot" EntitySet="parking_slot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_parking_slot_reservation_parking_slot" Association="Self.FK_parking_slot_reservation_parking_slot">
+            <End Role="parking_slot" EntitySet="parking_slot" />
+            <End Role="parking_slot_reservation" EntitySet="parking_slot_reservation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="estacionamientoModelStoreContainer" CdmEntityContainer="estacionamientoEntities">
+          <EntitySetMapping Name="customer">
+            <EntityTypeMapping TypeName="estacionamientoModel.customer">
+              <MappingFragment StoreEntitySet="customer">
+                <ScalarProperty Name="id_customer" ColumnName="id_customer" />
+                <ScalarProperty Name="customer_name" ColumnName="customer_name" />
+                <ScalarProperty Name="customer_lastname" ColumnName="customer_lastname" />
+                <ScalarProperty Name="customer_DUI" ColumnName="customer_DUI" />
+                <ScalarProperty Name="customer_password" ColumnName="customer_password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="parking_lot">
+            <EntityTypeMapping TypeName="estacionamientoModel.parking_lot">
+              <MappingFragment StoreEntitySet="parking_lot">
+                <ScalarProperty Name="id_parking_lot" ColumnName="id_parking_lot" />
+                <ScalarProperty Name="is_parking_lot_full" ColumnName="is_parking_lot_full" />
+                <ScalarProperty Name="numbers_of_slots" ColumnName="numbers_of_slots" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="parking_slot">
+            <EntityTypeMapping TypeName="estacionamientoModel.parking_slot">
+              <MappingFragment StoreEntitySet="parking_slot">
+                <ScalarProperty Name="id_parking_slot" ColumnName="id_parking_slot" />
+                <ScalarProperty Name="id_parking_lot" ColumnName="id_parking_lot" />
+                <ScalarProperty Name="slot_number" ColumnName="slot_number" />
+                <ScalarProperty Name="is_parking_slot_free" ColumnName="is_parking_slot_free" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="parking_slot_reservation">
+            <EntityTypeMapping TypeName="estacionamientoModel.parking_slot_reservation">
+              <MappingFragment StoreEntitySet="parking_slot_reservation">
+                <ScalarProperty Name="id_reservation" ColumnName="id_reservation" />
+                <ScalarProperty Name="customer_DUI" ColumnName="customer_DUI" />
+                <ScalarProperty Name="id_parking_slot" ColumnName="id_parking_slot" />
+                <ScalarProperty Name="hora_reserva" ColumnName="hora_reserva" />
+                <ScalarProperty Name="duration_in_minutes" ColumnName="duration_in_minutes" />
+                <ScalarProperty Name="hora_finalizada" ColumnName="hora_finalizada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
